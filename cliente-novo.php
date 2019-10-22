@@ -1,8 +1,26 @@
+<?php
+  if($_POST){
+    echo "cadastrar";
+    // INCLUIR NO ARQUIVO DE CONEXÃO
+    include "includes/conexao.php"
+    // CAPTURAR OS DADOS DO POST
+    $nome = $_POST ['nome'];
+    $telefone = $_POST['email'];
+    $email = $_POST ['cpf'];
+
+    //CRIAR P SQL
+    $sql = "INSERT INTO clientes VALUES
+    (default, '{$nome}','{$telefone}','{$email}','{$cpf}')";
+
+    echo $sql;
+  }
+
+?>
 <?php include "includes/header.php"; ?>
   <div class="container">
   <h1>CADASTRO DE CLIENTES</h1>
 
-  <form class="form-horizontal">
+<form class="form-horizontal" method="post" action="cliente-novo.php">
 <fieldset>
 
 <!-- Text input-->

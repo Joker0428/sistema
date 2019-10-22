@@ -1,5 +1,5 @@
 <?php
-  //definido local, usuário e senha
+  //definido local, usuário e senha (XAMPP)
    $conn = mysqli_connect('localhost','root','');
   //selecionado a base de dados
    $banco = mysqli_select_db($conn, 'sistemaemp');
