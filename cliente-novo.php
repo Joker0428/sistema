@@ -1,22 +1,39 @@
 <?php
   if($_POST){
-    echo "cadastrar";
     // INCLUIR NO ARQUIVO DE CONEXÃO
-    include "includes/conexao.php"
+    include "includes/conexao.php";
+    include "includes/funcoes.php";
     // CAPTURAR OS DADOS DO POST
     $nome = $_POST ['nome'];
-    $telefone = $_POST['email'];
-    $email = $_POST ['cpf'];
+    $telefone = $_POST['telefone'];
+    $email = $_POST ['email'];
+    $cpf = $_POST ['cpf'];
 
-    //CRIAR P SQL
-    $sql = "INSERT INTO clientes VALUES
-    (default, '{$nome}','{$telefone}','{$email}','{$cpf}')";
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+      $msg = "E-mail inválido";
+    }
+    else if (!validaCPF($cpf)){
+      $msg = "CPF inválido";
+    }
+    else{
 
-    echo $sql;
+      //CRIAR P SQL
+      $sql = "INSERT INTO cliente VALUES
+      (default, '{$nome}','{$telefone}','{$email}','{$cpf}')";
+      // Tenta cadastrar , retorna true ou false
+      $resposta = $conn ->query($sql);
+     // se true , verdadeiro , cadastro efetuado
+    if($resposta === true){
+      $msg ="Cadastrado com sucesso!";
+    }
+    else{
+      $msg ="Erro ao cadastrar!". $conn->error;
+    }
+    }
   }
 
 ?>
-<?php include "includes/header.php"; ?>
+<?php include "includes/header.php";?>
   <div class="container">
   <h1>CADASTRO DE CLIENTES</h1>
 
@@ -69,6 +86,9 @@
 
 </fieldset>
 </form>
+   <div>
+      <?php if(isset($msg)) echo $msg; // se existir $msg , imprima?> 
+   </div>   
    </div>  
 
 <?php include "includes/footer.php"; ?>
