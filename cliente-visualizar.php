@@ -1,4 +1,47 @@
 <?php
+  if($_POST){
+    // INCLUIR NO ARQUIVO DE CONEXÃO
+    include "includes/conexao.php";
+    include "includes/funcoes.php";
+    // CAPTURAR OS DADOS DO POST
+    $nome = $_POST ['nome'];
+    $telefone = $_POST['telefone'];
+    $email = $_POST ['email'];
+    $cpf = $_POST ['cpf'];
+    $id = $_POST ['id'];
+
+
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+      $msg = "E-mail inválido";
+    }
+    else if (!validaCPF($cpf)){
+      $msg = "CPF inválido";
+    }
+    else{
+
+      //CRIAR O SQL
+      $sql = "UPDATE cliente SET 
+        nome = '{$nome}',
+        telefone = '{$telefone}',
+        email = '{$email}',
+        cpf = '{$cpf}'
+        WHERE pk_cliente = {$id}";
+
+      // Tenta cadastrar , retorna true ou false
+      $resposta = $conn ->query($sql);
+     // se true , verdadeiro , cadastro efetuado
+    if($resposta === true){
+      $msg ="Atualizado com sucesso!";
+    }
+    else{
+      $msg ="Erro ao cadastrar!". $conn->error;
+    }
+    }
+  }
+
+?>
+
+<?php
 
    include "includes/conexao.php";
 
@@ -13,10 +56,21 @@
 
     
 <div class="container">
-  <h1>CADASTRO DE CLIENTES</h1>
+  <h1>DADOS DOS CLIENTES</h1>
 
-<form class="form-horizontal" method="post" action="cliente-novo.php">
+<form class="form-horizontal" method="post" action="cliente-visualizar.php?id=<?php echo $cliente ['pk_cliente'];?>">
 <fieldset>
+
+<input value="<?php echo $cliente['pk_cliente'];?>"id="id" name="id" type="hidden">
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="id">ID</label>  
+  <div class="col-md-4">
+  <input value="<?php echo $cliente['pk_cliente'];?>" id="id" name="id" disabled="disabled" type="text" placeholder="" class="form-control input-md">
+    
+  </div>
+</div>
 
 <!-- Text input-->
 <div class="form-group">
@@ -58,7 +112,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="singlebutton"></label>
   <div class="col-md-4">
-    <button id="singlebutton" name="singlebutton" class="btn btn-primary">Cadastrar</button>
+    <button id="singlebutton" name="singlebutton" class="btn btn-primary">Atualizar</button>
   </div>
 </div>
 
